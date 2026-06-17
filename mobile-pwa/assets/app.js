@@ -265,13 +265,7 @@
       return;
     }
 
-    setStatus("正在读取背景音乐...");
-    const response = await fetch(`./music/${encodePath(file)}`);
-    if (!response.ok) {
-      throw new Error(`无法读取音乐：${file}`);
-    }
-    const blob = await response.blob();
-    setAudioFile(new File([blob], file, { type: blob.type || "audio/mpeg" }));
+    setBuiltInAudio(file, `./music/${encodePath(file)}`);
     els.audioInput.value = "";
     els.audioLabel.textContent = "从手机选择";
     setStatus(state.images.length ? "素材已选择，可以生成视频。" : "请继续选择图片。");
@@ -312,6 +306,18 @@
     state.audio = file;
     state.audioPreviewUrl = createObjectUrl(file);
     els.audioPreview.src = state.audioPreviewUrl;
+    els.audioPreview.hidden = false;
+  }
+
+  function setBuiltInAudio(file, url) {
+    revokeObjectUrl(state.audioPreviewUrl);
+    state.audioPreviewUrl = "";
+    state.audio = {
+      name: file,
+      url,
+      builtIn: true,
+    };
+    els.audioPreview.src = url;
     els.audioPreview.hidden = false;
   }
 
@@ -571,8 +577,20 @@
 
     const audioExt = getExtension(state.audio, "mp3");
     const audioName = `audio.${audioExt}`;
-    await ffmpeg.writeFile(audioName, new Uint8Array(await state.audio.arrayBuffer()));
+    await ffmpeg.writeFile(audioName, await readAudioBytes(state.audio));
     return audioName;
+  }
+
+  async function readAudioBytes(audio) {
+    if (audio.builtIn) {
+      setStatus("正在读取背景音乐...");
+      const response = await fetch(audio.url);
+      if (!response.ok) {
+        throw new Error(`无法读取音乐：${audio.name}`);
+      }
+      return new Uint8Array(await response.arrayBuffer());
+    }
+    return new Uint8Array(await audio.arrayBuffer());
   }
 
   function buildFfmpegArgs(settings, audioName) {
@@ -781,13 +799,7 @@
   bindEvents();
   registerPwa();
   loadMusicOptions();
-  window.setTimeout(() => {
-    loadFfmpeg().catch((error) => {
-      console.warn(error);
-      els.ffmpegState.textContent = "FFmpeg 待加载";
-      setStatus("请选择图片和音乐。");
-    });
-  }, 600);
+  els.ffmpegState.textContent = "生成时自动准备";
   renderImages();
   updateActions();
 })();
