@@ -699,9 +699,9 @@
     els.imageInput.value = "";
     els.audioInput.value = "";
     els.audioLabel.textContent = "从手机选择";
-    els.secondsInput.value = "4";
+    els.secondsInput.value = "5";
     els.transitionDurationInput.value = "0.6";
-    els.resolutionInput.value = "720x1280";
+    els.resolutionInput.value = "1080x1920";
     els.transitionInput.value = "fade";
     els.fontSizeInput.value = "54";
     els.centerGapInput.value = "14";

@@ -1,4 +1,4 @@
-const CACHE_NAME = "ai-video-pwa-v8";
+const CACHE_NAME = "ai-video-pwa-v10";
 const APP_SHELL = [
   "./",
   "./index.html",
