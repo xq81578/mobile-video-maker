@@ -1,0 +1,19 @@
+{
+  "name": "随身影集",
+  "short_name": "随身影集",
+  "description": "在手机浏览器本地合成图片配乐视频。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef4f2",
+  "theme_color": "#eef4f2",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

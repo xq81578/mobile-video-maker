@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#eef4f2">
+    <title>随身影集</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="stylesheet" href="./assets/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>随身影集</h1>
+          <p id="runtimeHint">手机本地合成，素材不会上传到服务器</p>
+        </div>
+        <button class="icon-button" id="installButton" type="button" title="安装到桌面" hidden>＋</button>
+      </header>
+
+      <section class="panel media-panel" aria-labelledby="mediaTitle">
+        <div class="section-head">
+          <h2 id="mediaTitle">素材</h2>
+          <span id="imageCount">0 张图片</span>
+        </div>
+
+        <div class="upload-grid">
+          <label class="upload-tile">
+            <input id="imageInput" type="file" accept="image/*" multiple>
+            <span>选择图片</span>
+          </label>
+          <label class="select-tile">
+            <span>背景音乐</span>
+            <select id="musicSelect">
+              <option value="">正在读取音乐...</option>
+            </select>
+          </label>
+        </div>
+
+        <audio class="audio-preview" id="audioPreview" controls preload="metadata" hidden></audio>
+
+        <label class="fallback-upload">
+          <input id="audioInput" type="file" accept="audio/*">
+          <span id="audioLabel">从手机选择</span>
+        </label>
+
+        <div class="image-list" id="imageList" aria-live="polite"></div>
+      </section>
+
+      <section class="panel settings-panel" aria-labelledby="settingsTitle">
+        <div class="section-head">
+          <h2 id="settingsTitle">参数</h2>
+          <button class="ghost-button" id="resetButton" type="button">重置</button>
+        </div>
+
+        <div class="field-grid">
+          <label>
+            <span>每张时长</span>
+            <input id="secondsInput" type="number" min="1" max="20" step="0.5" value="4">
+          </label>
+          <label>
+            <span>转场时长</span>
+            <input id="transitionDurationInput" type="number" min="0.1" max="5" step="0.1" value="0.6">
+          </label>
+          <label>
+            <span>分辨率</span>
+            <select id="resolutionInput">
+              <option value="720x1280" selected>720 × 1280</option>
+              <option value="1080x1920">1080 × 1920</option>
+              <option value="720x720">720 × 720</option>
+              <option value="1280x720">1280 × 720</option>
+            </select>
+          </label>
+          <label>
+            <span>转场</span>
+            <select id="transitionInput">
+              <option value="fade" selected>淡入淡出</option>
+              <option value="slideleft">向左滑动</option>
+              <option value="slideright">向右滑动</option>
+              <option value="circleopen">圆形展开</option>
+              <option value="dissolve">溶解</option>
+              <option value="none">无转场</option>
+            </select>
+          </label>
+          <label>
+            <span>文字字号</span>
+            <input id="fontSizeInput" type="number" min="18" max="120" step="1" value="54">
+          </label>
+          <label>
+            <span>中线间距</span>
+            <input id="centerGapInput" type="number" min="0" max="120" step="1" value="14">
+          </label>
+        </div>
+      </section>
+
+      <section class="panel output-panel" aria-labelledby="outputTitle">
+        <div class="section-head">
+          <h2 id="outputTitle">生成</h2>
+          <span id="ffmpegState">FFmpeg 未加载</span>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p class="status" id="statusText">请选择图片和音乐。</p>
+
+        <div class="action-row">
+          <button class="primary-button" id="generateButton" type="button" disabled>生成视频</button>
+        </div>
+
+        <video id="previewVideo" controls playsinline hidden></video>
+        <button class="download-link" id="downloadButton" type="button" hidden>保存 / 下载 MP4</button>
+      </section>
+    </main>
+
+    <template id="imageItemTemplate">
+      <article class="image-item">
+        <img alt="">
+        <div class="image-fields">
+          <input class="top-text" type="text" placeholder="上方文字" value="十年前">
+          <input class="bottom-text" type="text" placeholder="下方文字" value="现在">
+        </div>
+        <div class="image-actions">
+          <button type="button" class="move-up" title="上移">↑</button>
+          <button type="button" class="move-down" title="下移">↓</button>
+          <button type="button" class="remove" title="删除">×</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="./vendor/ffmpeg/ffmpeg.js"></script>
+    <script src="./vendor/ffmpeg/util.js"></script>
+    <script src="./assets/app.js"></script>
+  </body>
+</html>
