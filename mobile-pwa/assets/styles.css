@@ -197,6 +197,7 @@ h2 {
   border-radius: 6px;
   object-fit: cover;
   background: #0f1115;
+  cursor: zoom-in;
 }
 
 .image-fields {
@@ -322,6 +323,42 @@ video {
 
 .download-link {
   margin-top: 10px;
+}
+
+.image-preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(12, 17, 20, 0.86);
+}
+
+.image-preview-modal[hidden] {
+  display: none;
+}
+
+.image-preview-modal img {
+  max-width: 100%;
+  max-height: 88vh;
+  border-radius: 8px;
+  object-fit: contain;
+  background: #000000;
+}
+
+.preview-close {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.42);
+  color: #ffffff;
+  font-size: 28px;
+  line-height: 1;
 }
 
 @media (max-width: 560px) {

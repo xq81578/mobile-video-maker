@@ -42,6 +42,9 @@
     downloadButton: document.getElementById("downloadButton"),
     installButton: document.getElementById("installButton"),
     template: document.getElementById("imageItemTemplate"),
+    imagePreviewModal: document.getElementById("imagePreviewModal"),
+    imagePreviewLarge: document.getElementById("imagePreviewLarge"),
+    imagePreviewClose: document.getElementById("imagePreviewClose"),
   };
 
   function setStatus(text) {
@@ -150,6 +153,7 @@
 
       img.src = item.url;
       img.alt = item.file.name;
+      img.addEventListener("click", () => openImagePreview(item));
       topText.value = item.topText;
       bottomText.value = item.bottomText;
       up.disabled = index === 0;
@@ -169,6 +173,17 @@
     });
 
     updateActions();
+  }
+
+  function openImagePreview(item) {
+    els.imagePreviewLarge.src = item.url;
+    els.imagePreviewLarge.alt = item.file.name;
+    els.imagePreviewModal.hidden = false;
+  }
+
+  function closeImagePreview() {
+    els.imagePreviewModal.hidden = true;
+    els.imagePreviewLarge.removeAttribute("src");
   }
 
   function isAudioFile(file) {
@@ -770,6 +785,17 @@
     els.generateButton.addEventListener("click", generateVideo);
     els.downloadButton.addEventListener("click", saveGeneratedVideo);
     els.resetButton.addEventListener("click", resetAll);
+    els.imagePreviewClose.addEventListener("click", closeImagePreview);
+    els.imagePreviewModal.addEventListener("click", (event) => {
+      if (event.target === els.imagePreviewModal) {
+        closeImagePreview();
+      }
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !els.imagePreviewModal.hidden) {
+        closeImagePreview();
+      }
+    });
 
     els.installButton.addEventListener("click", async () => {
       if (!state.installPrompt) {
